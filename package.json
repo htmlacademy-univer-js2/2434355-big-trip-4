@@ -29,8 +29,5 @@
   },
   "engines": {
     "node": "18"
-  },
-  "dependencies": {
-    "dayjs": "1.11.6"
   }
 }
