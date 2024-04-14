@@ -1,4 +1,3 @@
-
 import {createElement} from '../render.js';
 
 function createFilterTemplate() {
