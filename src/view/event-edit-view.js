@@ -8,6 +8,7 @@ function getDestination(event) {
   return mockDestinations.find((destination) => destination.id === event.destination);
 }
 
+
 function createOffersTemplate(event) {
   const typeOffer = mockOffers.find((offer) => offer.type === event.type);
   const offersTemplate = typeOffer
@@ -25,7 +26,7 @@ function createOffersTemplate(event) {
             <label class="event__offer-label" for="event-offer-${offer.title}-1">
               <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${offer.price}</span>
+              <span class="event__offer-price">${offer.offerPrice}</span>
             </label>
           </div>
         `).join('')}

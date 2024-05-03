@@ -7,6 +7,7 @@ function createDescription(text) {
   for (let i = 0; i < sentencesCount; i++) {
     description.push(getRandomArrayElement(text.split('.')));
   }
+
   return description.join(' ');
 }
 
@@ -23,11 +24,7 @@ const mockDestinations = [
       {
         src: getRandomPicture(),
         description: ''
-      },
-      {
-        src: getRandomPicture(),
-        description: ''
-      },
+      }
     ]
   },
   {
@@ -45,7 +42,12 @@ const mockDestinations = [
     id: 3,
     description: createDescription(TEXT),
     name: getRandomArrayElement(DESTINATIONS),
-    pictures: []
+    pictures: [
+      {
+        src: getRandomPicture(),
+        description: ''
+      }
+    ]
   },
 ];
 
