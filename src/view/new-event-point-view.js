@@ -167,8 +167,8 @@ function createNewWayPointTemplate() {
   );
 }
 
-export default class NewWayPointView extends AbstractView{
-  getTemplate() {
+export default class NewEventPointView extends AbstractView{
+  get template() {
     return createNewWayPointTemplate();
   }
 }

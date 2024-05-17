@@ -75,12 +75,22 @@ function createEventTemplate(event) {
 
 export default class EventView extends AbstractView {
   #event = null;
-  constructor({event}) {
+  #handleClick = null;
+  constructor({event, onClick}) {
     super();
     this.#event = event;
+    this.#handleClick = onClick;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#ClickHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createEventTemplate(this.#event);
   }
+
+  #ClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick();
+  };
 }

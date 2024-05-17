@@ -8,7 +8,6 @@ function getDestination(event) {
   return mockDestinations.find((destination) => destination.id === event.destination);
 }
 
-
 function createOffersTemplate(event) {
   const typeOffer = mockOffers.find((offer) => offer.type === event.type);
   const offersTemplate = typeOffer
@@ -180,12 +179,22 @@ function createEventEditTemplate(event) {
 
 export default class EventEditView extends AbstractView{
   #event = null;
-  constructor({event}) {
+  #handleClick = null;
+  constructor({event, onClick}) {
     super();
     this.#event = event;
+    this.#handleClick = onClick;
+
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#clickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createEventEditTemplate(this.#event);
   }
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick();
+  };
 }
