@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeEventDueDate } from '../utils.js';
 import { mockOffers } from '../mock/offer.js';
 import { mockDestinations } from '../mock/destination.js';
@@ -7,7 +7,6 @@ import { DATE_FORMAT } from '../const.js';
 function getDestination(event) {
   return mockDestinations.find((destination) => destination.id === event.destination);
 }
-
 
 function createOffersTemplate(event) {
   const typeOffer = mockOffers.find((offer) => offer.type === event.type);
@@ -178,24 +177,24 @@ function createEventEditTemplate(event) {
   );
 }
 
-export default class EventEditView {
-  constructor({event}) {
-    this.event = event;
+export default class EventEditView extends AbstractView{
+  #event = null;
+  #handleClick = null;
+  constructor({event, onClick}) {
+    super();
+    this.#event = event;
+    this.#handleClick = onClick;
+
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#clickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
-  getTemplate() {
-    return createEventEditTemplate(this.event);
+  get template() {
+    return createEventEditTemplate(this.#event);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick();
+  };
 }
