@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeEventDueDate } from '../utils.js';
 import { mockOffers } from '../mock/offer.js';
 import { mockDestinations } from '../mock/destination.js';
@@ -178,24 +178,14 @@ function createEventEditTemplate(event) {
   );
 }
 
-export default class EventEditView {
+export default class EventEditView extends AbstractView{
+  #event = null;
   constructor({event}) {
-    this.event = event;
+    super();
+    this.#event = event;
   }
 
   getTemplate() {
-    return createEventEditTemplate(this.event);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+    return createEventEditTemplate(this.#event);
   }
 }
