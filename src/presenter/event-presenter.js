@@ -26,12 +26,17 @@ export default class EventPresenter {
     render(this.#tripComponent, this.#eventsContainer);
     render(new SortView(), this.#eventsContainer.element);
     render(this.#eventListComponent, this.#tripComponent.element);
-    render(new EventEditView({event: this.#tripEvents[0]}), this.#eventListComponent.element);
 
-    for (let i = 1; i < this.#tripEvents.length; i++) {
-      render(new EventView({event: this.#tripEvents[i]}), this.#eventListComponent.element);
+    for (let i = 0; i < this.#tripEvents.length; i++) {
+      this.#renderEvent(this.#tripEvents[i]);
     }
 
     render(new NewWayPointView(), this.#tripComponent.element);
+  }
+
+  #renderEvent(event) {
+    const eventComponent = new EventView({event});
+
+    render(eventComponent, this.#eventListComponent.element);
   }
 }
