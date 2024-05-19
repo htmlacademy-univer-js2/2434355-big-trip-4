@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { mockDestinations } from '../mock/destination.js';
-import { humanizeEventDueDate } from '../utils/event.js';
+import { humanizeEventDate } from '../utils/event.js';
 import { DATE_FORMAT } from '../const.js';
 
 function getDestination(event) {
@@ -20,8 +20,8 @@ function getTripTitles(events) {
 
 function getTripDate (events) {
   let eventDate = '';
-  eventDate += `${humanizeEventDueDate(events[0].dateFrom, DATE_FORMAT)}&nbsp;&mdash;&nbsp;` +
-  `${humanizeEventDueDate(events.slice(-1)[0].dateTo, DATE_FORMAT).split(' ')}`;
+  eventDate += `${humanizeEventDate(events[0].dateFrom, DATE_FORMAT)}&nbsp;&mdash;&nbsp;` +
+  `${humanizeEventDate(events.slice(-1)[0].dateTo, DATE_FORMAT).split(' ')}`;
 
   return eventDate;
 }

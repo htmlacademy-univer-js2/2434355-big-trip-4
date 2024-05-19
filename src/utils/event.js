@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { getRandomInteger } from '../utils/common.js';
 
 
-const humanizeEventDueDate = (dueDate, dateFormat) => dayjs(dueDate).format(dateFormat);
+const humanizeEventDate = (dueDate, dateFormat) => dayjs(dueDate).format(dateFormat);
 
 const getDateDifference = (dateFrom, dateTo) => {
   const days = dateTo.diff(dateFrom, 'day');
@@ -38,4 +38,4 @@ function isEventPast(dueDate) {
   return dueDate && dayjs().isAfter(dueDate, 'D');
 }
 
-export { humanizeEventDueDate, getDateDifference, isFavourite, isEventFuture, isEventPast, isEventPresent};
+export { humanizeEventDate, getDateDifference, isFavourite, isEventFuture, isEventPast, isEventPresent};

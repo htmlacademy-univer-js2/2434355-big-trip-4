@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeEventDueDate, getDateDifference } from '../utils/event.js';
+import { humanizeEventDate, getDateDifference } from '../utils/event.js';
 import { mockDestinations } from '../mock/destination.js';
 import { mockOffers } from '../mock/offer.js';
 import { DATE_FORMAT_DAY, DATE_FORMAT_HOURS } from '../const.js';
@@ -42,16 +42,16 @@ function createEventTemplate(event) {
   return (
     `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="${dateFrom}">${humanizeEventDueDate(dateFrom, DATE_FORMAT_DAY)}</time>
+        <time class="event__date" datetime="${dateFrom}">${humanizeEventDate(dateFrom, DATE_FORMAT_DAY)}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${destination.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDueDate(dateFrom, DATE_FORMAT_HOURS)}</time>
+            <time class="event__start-time" datetime="${dateFrom}">${humanizeEventDate(dateFrom, DATE_FORMAT_HOURS)}</time>
             &mdash;
-            <time class="event__end-time" datetime="${dateTo}">${humanizeEventDueDate(dateTo, DATE_FORMAT_HOURS)}</time>
+            <time class="event__end-time" datetime="${dateTo}">${humanizeEventDate(dateTo, DATE_FORMAT_HOURS)}</time>
           </p>
           <p class="event__duration">${getDateDifference(dateFrom, dateTo)}</p>
         </div>

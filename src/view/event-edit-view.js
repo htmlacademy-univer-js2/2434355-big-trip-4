@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeEventDueDate } from '../utils/event.js';
+import { humanizeEventDate } from '../utils/event.js';
 import { mockOffers } from '../mock/offer.js';
 import { mockDestinations } from '../mock/destination.js';
 import { DATE_FORMAT } from '../const.js';
@@ -128,7 +128,7 @@ function createEventEditTemplate(event) {
               id="event-start-time-1"
               type="text"
               name="event-start-time"
-              value="${humanizeEventDueDate(dateFrom, DATE_FORMAT)}"
+              value="${humanizeEventDate(dateFrom, DATE_FORMAT)}"
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -137,7 +137,7 @@ function createEventEditTemplate(event) {
               id="event-end-time-1"
               type="text"
               name="event-end-time"
-              value="${humanizeEventDueDate(dateTo, DATE_FORMAT)}"
+              value="${humanizeEventDate(dateTo, DATE_FORMAT)}"
             >
           </div>
 
