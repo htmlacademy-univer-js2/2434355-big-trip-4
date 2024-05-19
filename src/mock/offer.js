@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { MIN_OFFER_PRICE, MAX_OFFER_PRICE } from '../const.js';
 
 const mockOffers = [
@@ -7,7 +7,7 @@ const mockOffers = [
     offers: [
       {
         id: 1,
-        title: 'offer',
+        title: 'offer Taxi',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -17,7 +17,7 @@ const mockOffers = [
     offers: [
       {
         id: 2,
-        title: 'offer',
+        title: 'offer Bus',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -27,7 +27,7 @@ const mockOffers = [
     offers: [
       {
         id: 3,
-        title: 'offer',
+        title: 'offer Train',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -37,7 +37,7 @@ const mockOffers = [
     offers: [
       {
         id: 4,
-        title: 'offer',
+        title: 'offer Ship',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -47,7 +47,7 @@ const mockOffers = [
     offers: [
       {
         id: 5,
-        title: 'offer',
+        title: 'offer Drive',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -57,7 +57,7 @@ const mockOffers = [
     offers: [
       {
         id: 6,
-        title: 'offer',
+        title: 'offer Flight',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -67,7 +67,7 @@ const mockOffers = [
     offers: [
       {
         id: 7,
-        title: 'offer',
+        title: 'offer Check-in',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -77,7 +77,7 @@ const mockOffers = [
     offers: [
       {
         id: 8,
-        title: 'offer',
+        title: 'offer Sightseeing',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
@@ -87,7 +87,7 @@ const mockOffers = [
     offers: [
       {
         id: 9,
-        title: 'offer',
+        title: 'offer Restaurant',
         offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
       }
     ]
