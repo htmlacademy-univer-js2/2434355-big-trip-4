@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeEventDueDate, getDateDifference } from '../utils.js';
+import { humanizeEventDueDate, getDateDifference } from '../utils/event.js';
 import { mockDestinations } from '../mock/destination.js';
 import { mockOffers } from '../mock/offer.js';
 import { DATE_FORMAT_DAY, DATE_FORMAT_HOURS } from '../const.js';

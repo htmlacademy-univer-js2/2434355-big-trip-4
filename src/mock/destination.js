@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayElement } from '../utils.js';
+import { getRandomInteger, getRandomArrayElement } from '../utils/common.js';
 import { DESTINATIONS, TEXT, MIN_VALUE, MAX_COUNT_DESCRIPTION, MAX_PICTURE_ID, URL } from '../const.js';
 
 function createDescription(text) {

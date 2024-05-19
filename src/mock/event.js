@@ -1,4 +1,5 @@
-import { getRandomArrayElement, getRandomInteger, isFavourite } from '../utils.js';
+import { getRandomArrayElement, getRandomInteger } from '../utils/common.js';
+import { isFavourite }from '../utils/event.js';
 import { EVENT_TYPES, MIN_BASIC_PRICE, MAX_BASIC_PRICE } from '../const.js';
 import dayjs from 'dayjs';
 
@@ -37,8 +38,8 @@ const mockEvents = [
     id: 4,
     type: getRandomArrayElement(EVENT_TYPES),
     basicPrice: getRandomInteger(MIN_BASIC_PRICE, MAX_BASIC_PRICE),
-    dateFrom: dayjs('2024-03-22 10:20'),
-    dateTo: dayjs('2024-03-23 12:40'),
+    dateFrom: dayjs('2024-05-26 10:20'),
+    dateTo: dayjs('2024-05-26 12:40'),
     destination: 1,
     offers: [4],
     isFavorite: isFavourite()
