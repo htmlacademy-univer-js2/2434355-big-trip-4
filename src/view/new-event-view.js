@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createNewWayPointTemplate() {
+function createNewEventTemplate() {
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -167,8 +167,8 @@ function createNewWayPointTemplate() {
   );
 }
 
-export default class NewEventPointView extends AbstractView{
+export default class NewEventView extends AbstractView{
   get template() {
-    return createNewWayPointTemplate();
+    return createNewEventTemplate();
   }
 }

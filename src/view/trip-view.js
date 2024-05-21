@@ -21,7 +21,7 @@ function getTripTitles(events) {
 function getTripDate (events) {
   let eventDate = '';
   eventDate += `${humanizeEventDate(events[0].dateFrom, DATE_FORMAT)}&nbsp;&mdash;&nbsp;` +
-  `${humanizeEventDate(events.slice(-1)[0].dateTo, DATE_FORMAT).split(' ')}`;
+  `${humanizeEventDate(events.slice(-1)[0].dateTo, DATE_FORMAT).split(' ').join(' ')}`;
 
   return eventDate;
 }

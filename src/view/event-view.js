@@ -35,9 +35,7 @@ function createEventTemplate(event) {
   const {type, basicPrice, dateFrom, dateTo, isFavorite} = event;
   const offersTemplate = createOffersTemplate(event);
   const destination = getDestination(event);
-  const isEventFavorite = isFavorite
-    ? 'event__favorite-btn--active'
-    : '';
+  const isEventFavorite = () => isFavorite ? 'event__favorite-btn--active' : '';
 
   return (
     `<li class="trip-events__item">
@@ -75,22 +73,30 @@ function createEventTemplate(event) {
 
 export default class EventView extends AbstractView {
   #event = null;
-  #handleClick = null;
-  constructor({event, onClick}) {
+  #handleEditClick = null;
+  #handleFavoriteClick = null;
+
+  constructor({event, onEditClick, onFavoriteClick}) {
     super();
     this.#event = event;
-    this.#handleClick = onClick;
+    this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#ClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
     return createEventTemplate(this.#event);
   }
 
-  #ClickHandler = (evt) => {
+  #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleClick();
+    this.#handleEditClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 }

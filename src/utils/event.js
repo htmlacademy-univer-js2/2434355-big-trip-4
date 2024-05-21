@@ -38,4 +38,4 @@ function isEventPast(dueDate) {
   return dueDate && dayjs().isAfter(dueDate, 'D');
 }
 
-export { humanizeEventDate, getDateDifference, isFavourite, isEventFuture, isEventPast, isEventPresent};
+export { humanizeEventDate, getDateDifference, isFavourite, isEventFuture, isEventPast, isEventPresent };
