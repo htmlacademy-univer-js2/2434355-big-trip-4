@@ -1,7 +1,7 @@
 import {render, RenderPosition} from './framework/render.js';
 import TripView from './view/trip-view.js';
 import FilterView from './view/filter-view.js';
-import EventPresenter from './presenter/event-presenter.js';
+import EventPresenter from './presenter/trip-presenter.js';
 import EventModel from './model/events-model.js';
 import {generateFilter} from './mock/filter.js';
 

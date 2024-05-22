@@ -1,75 +1,103 @@
-import {render, replace} from '../framework/render.js';
-import SortView from '../view/sort-view.js';
-import EventListView from '../view/event-list-view.js';
+import { render, replace, remove } from '../framework/render.js';
 import EventView from '../view/event-view.js';
 import EventEditView from '../view/event-edit-view.js';
-import NewEventPointView from '../view/new-event-point-view.js';
-import NoEventView from '../view/no-event-view.js';
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
 export default class EventPresenter {
   #eventsContainer = null;
-  #eventsModel = null;
+  #eventComponent = null;
+  #eventEditComponent = null;
+  #handleModeChange = null;
+  #handleEventChange = null;
+  #event = null;
 
-  #eventListComponent = new EventListView();
-  #loadMoreButtonComponent = null;
+  #mode = Mode.DEFAULT;
 
-  #tripEvents = [];
-
-  constructor({eventsContainer, eventsModel}) {
+  constructor({eventsContainer, onEventChange, onModeChange}) {
     this.#eventsContainer = eventsContainer;
-    this.#eventsModel = eventsModel;
+    this.#handleEventChange = onEventChange;
+    this.#handleModeChange = onModeChange;
   }
 
-  init() {
-    this.#tripEvents = [...this.#eventsModel.events];
+  init(event) {
+    this.#event = event;
 
-    if (this.#tripEvents.length === 0) {
-      render(new NoEventView(), this.#eventsContainer);
+    const prevEventComponent = this.#eventComponent;
+    const prevEventEditComponent = this.#eventEditComponent;
+
+    this.#eventComponent = new EventView({
+      event: this.#event,
+      onEditClick: this.#handleEditClick,
+      onFavoriteClick: this.#handleFavoriteClick
+    });
+
+    this.#eventEditComponent = new EventEditView({
+      event:this.#event,
+      onFormSubmit: this.#handleFormSubmit,
+    });
+
+    if (prevEventComponent === null || prevEventEditComponent === null) {
+      render(this.#eventComponent, this.#eventsContainer);
       return;
     }
 
-    render(new SortView(), this.#eventsContainer);
-    render(this.#eventListComponent, this.#eventsContainer);
-    render(new NewEventPointView(), this.#eventListComponent.element);
+    if (this.#mode === Mode.DEFAULT) {
+      replace(this.#eventComponent, prevEventComponent);
+    }
 
-    for (let i = 0; i < this.#tripEvents.length; i++) {
-      this.#renderEvent(this.#tripEvents[i]);
+    if (this.#mode === Mode.EDITING) {
+      replace(this.#eventEditComponent, prevEventEditComponent);
+    }
+
+    remove(prevEventComponent);
+    remove(prevEventEditComponent);
+  }
+
+  destroy() {
+    remove(this.#eventComponent);
+    remove(this.#eventEditComponent);
+  }
+
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceEditToEvent();
     }
   }
 
-  #renderEvent(event) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceEditToEvent();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const eventComponent = new EventView({
-      event,
-      onClick: () => {
-        replaceEventToEdit();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    const eventEditComponent = new EventEditView({
-      event,
-      onClick: () => {
-        replaceEditToEvent();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    function replaceEventToEdit() {
-      replace(eventEditComponent, eventComponent);
-    }
-
-    function replaceEditToEvent() {
-      replace(eventComponent, eventEditComponent);
-    }
-
-    render(eventComponent, this.#eventListComponent.element);
+  #replaceEventToEdit() {
+    replace(this.#eventEditComponent, this.#eventComponent);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleModeChange();
+    this.#mode = Mode.EDITING;
   }
+
+  #replaceEditToEvent() {
+    replace(this.#eventComponent, this.#eventEditComponent);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
+  }
+
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#replaceEditToEvent();
+    }
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handleEventChange({...this.#event, isFavorite: !this.#event.isFavorite});
+  };
+
+  #handleEditClick = () => {
+    this.#replaceEventToEdit();
+  };
+
+  #handleFormSubmit = (event) => {
+    this.#handleEventChange(event);
+    this.#replaceEditToEvent();
+  };
 }

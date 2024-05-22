@@ -1,6 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-
 function createFilterItemTemplate (filter) {
   const {type} = filter;
 
@@ -14,7 +13,6 @@ function createFilterItemTemplate (filter) {
         <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
       </div>`
   );
-
 }
 
 function createFiltersTemplate(filters) {

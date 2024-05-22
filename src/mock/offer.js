@@ -8,7 +8,7 @@ const mockOffers = [
       {
         id: 1,
         title: 'offer Taxi',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -18,7 +18,7 @@ const mockOffers = [
       {
         id: 2,
         title: 'offer Bus',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -28,7 +28,7 @@ const mockOffers = [
       {
         id: 3,
         title: 'offer Train',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -38,7 +38,7 @@ const mockOffers = [
       {
         id: 4,
         title: 'offer Ship',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -48,7 +48,7 @@ const mockOffers = [
       {
         id: 5,
         title: 'offer Drive',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -58,7 +58,7 @@ const mockOffers = [
       {
         id: 6,
         title: 'offer Flight',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -68,7 +68,7 @@ const mockOffers = [
       {
         id: 7,
         title: 'offer Check-in',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -78,7 +78,7 @@ const mockOffers = [
       {
         id: 8,
         title: 'offer Sightseeing',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   },
@@ -88,7 +88,7 @@ const mockOffers = [
       {
         id: 9,
         title: 'offer Restaurant',
-        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+        offerPrice: getRandomInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       }
     ]
   }
