@@ -47,7 +47,7 @@ export default class TripPresenter {
   }
 
   #renderNoEvents() {
-    render(this.#noEventsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
+    render(this.#noEventsComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderEvent(event) {
@@ -67,9 +67,7 @@ export default class TripPresenter {
   }
 
   #renderEventList() {
-    for (let i = 0; i < this.#tripEvents.length; i++) {
-      this.#renderEvent(this.#tripEvents[i]);
-    }
+    this.#tripEvents.forEach((event) => this.#renderEvent(event));
   }
 
   #renderTrip() {

@@ -37,7 +37,7 @@ export default class EventPresenter {
 
     this.#eventEditComponent = new EventEditView({
       event:this.#event,
-      onEditClick: this.#handleEditClick
+      onFormSubmit: this.#handleFormSubmit,
     });
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -57,27 +57,20 @@ export default class EventPresenter {
     remove(prevEventEditComponent);
   }
 
+  destroy() {
+    remove(this.#eventComponent);
+    remove(this.#eventEditComponent);
+  }
+
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceEditToEvent();
     }
   }
 
-  destroy() {
-    remove(this.#eventComponent);
-    remove(this.#eventEditComponent);
-  }
-
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      this.#replaceEditToEvent();
-    }
-  };
-
   #replaceEventToEdit() {
     replace(this.#eventEditComponent, this.#eventComponent);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
   }
@@ -87,6 +80,13 @@ export default class EventPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   }
+
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#replaceEditToEvent();
+    }
+  };
 
   #handleFavoriteClick = () => {
     this.#handleEventChange({...this.#event, isFavorite: !this.#event.isFavorite});

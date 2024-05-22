@@ -22,7 +22,7 @@ const getDateDifference = (dateFrom, dateTo) => {
   return dayjs(difference).format('mm[M]');
 };
 
-function isFavourite (){
+function isFavoriteEvent () {
   return Boolean(getRandomInteger(0, 1));
 }
 
@@ -38,4 +38,4 @@ function isEventPast(dueDate) {
   return dueDate && dayjs().isAfter(dueDate, 'D');
 }
 
-export { humanizeEventDate, getDateDifference, isFavourite, isEventFuture, isEventPast, isEventPresent };
+export { humanizeEventDate, getDateDifference, isFavoriteEvent, isEventFuture, isEventPast, isEventPresent };

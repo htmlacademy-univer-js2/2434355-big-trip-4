@@ -35,7 +35,9 @@ function createEventTemplate(event) {
   const {type, basicPrice, dateFrom, dateTo, isFavorite} = event;
   const offersTemplate = createOffersTemplate(event);
   const destination = getDestination(event);
-  const isEventFavorite = () => isFavorite ? 'event__favorite-btn--active' : '';
+  const isEventFavorite = isFavorite
+    ? 'event__favorite-btn--active'
+    : '';
 
   return (
     `<li class="trip-events__item">
@@ -82,8 +84,10 @@ export default class EventView extends AbstractView {
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
