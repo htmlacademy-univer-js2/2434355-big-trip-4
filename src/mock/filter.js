@@ -1,9 +1,10 @@
 import {filter} from '../utils/filter.js';
 
-function generateFilter() {
+function generateFilter(events) {
   return Object.entries(filter).map(
-    ([filterType]) => ({
+    ([filterType, tripEvents]) => ({
       type: filterType,
+      count: tripEvents(events).length,
     }),
   );
 }

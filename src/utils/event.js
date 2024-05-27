@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { getRandomInteger } from '../utils/common.js';
 
-
 const humanizeEventDate = (dueDate, dateFormat) => dayjs(dueDate).format(dateFormat);
 
 const getDateDifference = (dateFrom, dateTo) => {
@@ -38,4 +37,36 @@ function isEventPast(dueDate) {
   return dueDate && dayjs().isAfter(dueDate, 'D');
 }
 
-export { humanizeEventDate, getDateDifference, isFavoriteEvent, isEventFuture, isEventPast, isEventPresent };
+function getWeightForNullDate(dateA, dateB) {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+}
+
+function sortByDay(eventA, eventB) {
+  const weight = getWeightForNullDate(eventA.dateFrom, eventB.dateFrom);
+
+  return weight ?? dayjs(eventA.dateFrom).diff(dayjs(eventB.dateFrom));
+}
+
+function sortByPrice(eventA, eventB) {
+  return eventA.basicPrice - eventB.basicPrice;
+}
+
+function sortByTime(eventA, eventB) {
+  const weight = getWeightForNullDate(eventA.dateFrom, eventB.dateFrom);
+
+  return weight ?? dayjs(eventA.dateTo - eventA.dateFrom).diff(dayjs(eventB.dateTo - eventB.dateFrom));
+}
+
+export { humanizeEventDate, getDateDifference, isFavoriteEvent, isEventFuture, isEventPast, isEventPresent, sortByDay, sortByPrice, sortByTime };
