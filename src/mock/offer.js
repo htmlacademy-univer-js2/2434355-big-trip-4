@@ -1,9 +1,9 @@
 import { getRandomArrayElement } from '../utils/common';
 
-const OFFER_TYPES_FLIGHT = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
+const OFFER_TYPES_FLIGHT = ['Add luggage', 'Switch to business class', 'Add meal', 'Choose seats', 'Travel by train'];
 const PRICES_FLIGHT = [50, 80, 15, 5, 40];
 
-const OFFER_TYPES_TAXI = ['Add luggage', 'Switch to comfort class'];
+const OFFER_TYPES_TAXI = ['Add luggage', 'Switch to business class'];
 const PRICES_TAXI = [50, 80];
 
 
