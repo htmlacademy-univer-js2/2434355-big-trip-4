@@ -1,5 +1,9 @@
 import dayjs from 'dayjs';
 import { getRandomInteger } from '../utils/common.js';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const humanizeEventDate = (dueDate, dateFormat) => dayjs(dueDate).format(dateFormat);
 
@@ -53,9 +57,30 @@ function getWeightForNullDate(dateA, dateB) {
   return null;
 }
 
-function generateDate () {
-  return `2024-0${getRandomInteger(1, 6)}-${getRandomInteger(1, 30)} ${getRandomInteger(0, 2)}${getRandomInteger(0, 9)}:${getRandomInteger(0, 5)}${getRandomInteger(0, 9)}`;
+const Duration = {
+  HOUR: 5,
+  DAY: 5,
+  MIN: 59
+};
+
+let date = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
+
+function generateDate ({next}) {
+  const minsGap = getRandomInteger(0, Duration.MIN);
+  const hoursGap = getRandomInteger(1, Duration.HOUR);
+  const daysGap = getRandomInteger(0, Duration.DAY);
+
+  if (next) {
+    date = dayjs(date)
+      .add(minsGap, 'minute')
+      .add(hoursGap, 'hour')
+      .add(daysGap, 'day')
+      .toDate();
+  }
+
+  return date;
 }
+
 
 function sortByDay(eventA, eventB) {
   const weight = getWeightForNullDate(eventA.dateFrom, eventB.dateFrom);

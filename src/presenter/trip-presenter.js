@@ -10,28 +10,33 @@ import { sortByDay, sortByTime, sortByPrice } from '../utils/event.js';
 
 export default class TripPresenter {
   #tripContainer = null;
-  #eventList = null;
+  #destinationsModel = null;
+  #offersModel = null;
+  #eventsModel = null;
 
   #sortComponent = null;
   #noEventsComponent = new NoEventView();
   #newEventComponent = new NewEventView();
+  #eventList = new EventListView();
   #eventPresenters = new Map();
   #currentSortType = SortType.DAY;
   #sourcedTripEvents = [];
 
   #events = [];
 
-  constructor({tripContainer, eventsModel}) {
+  constructor({tripContainer, eventsModel, destinationsModel, offersModel}) {
     this.#tripContainer = tripContainer;
-    this.#eventList = new EventListView();
-    this.#events = [...eventsModel.get()];
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+    this.#eventsModel = eventsModel;
+    this.#events = [...this.#eventsModel.get()];
   }
 
   init() {
     this.#renderTrip();
   }
 
-  #sortEvents (sortType) {
+  #sortEvents = (sortType) => {
     switch (sortType) {
       case SortType.TIME:
         this.#events.sort(sortByTime);
@@ -44,7 +49,7 @@ export default class TripPresenter {
     }
 
     this.#currentSortType = sortType;
-  }
+  };
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
@@ -75,6 +80,8 @@ export default class TripPresenter {
   #renderEvent(event) {
     const eventPresenter = new EventPresenter({
       eventsContainer: this.#eventList.element,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel,
       onEventChange: this.#handleEventChange,
       onModeChange: this.#handleModeChange
     });

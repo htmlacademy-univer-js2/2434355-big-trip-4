@@ -7,16 +7,20 @@ export default class EventPresenter {
   #eventsContainer = null;
   #eventComponent = null;
   #eventEditComponent = null;
+  #destinationsModel = null;
+  #offersModel = null;
   #handleModeChange = null;
   #handleEventChange = null;
   #event = null;
 
   #mode = MODE.DEFAULT;
 
-  constructor({eventsContainer, onEventChange, onModeChange}) {
+  constructor({eventsContainer, destinationsModel, offersModel, onEventChange, onModeChange}) {
     this.#eventsContainer = eventsContainer;
     this.#handleEventChange = onEventChange;
     this.#handleModeChange = onModeChange;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   init(event) {
@@ -27,13 +31,18 @@ export default class EventPresenter {
 
     this.#eventComponent = new EventView({
       event: this.#event,
+      eventDestination: this.#destinationsModel.getById(event.destination),
+      eventOffers: this.#offersModel.getByType(event.type),
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick
     });
 
     this.#eventEditComponent = new EventEditView({
-      event:this.#event,
+      event: this.#event,
+      eventDestination: this.#destinationsModel.get(),
+      eventOffers: this.#offersModel.get(),
       onFormSubmit: this.#handleFormSubmit,
+      onResetClick: this.#resetButtonClickHandler
     });
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -60,6 +69,7 @@ export default class EventPresenter {
 
   resetView() {
     if (this.#mode !== MODE.DEFAULT) {
+      this.#eventEditComponent.reset(this.#event);
       this.#replaceEditToEvent();
     }
   }
@@ -81,6 +91,7 @@ export default class EventPresenter {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       this.#replaceEditToEvent();
+      this.#eventEditComponent.reset(this.#event);
     }
   };
 
@@ -94,6 +105,11 @@ export default class EventPresenter {
 
   #handleFormSubmit = (event) => {
     this.#handleEventChange(event);
+    this.#replaceEditToEvent();
+  };
+
+  #resetButtonClickHandler = () => {
+    this.#eventEditComponent.reset(this.#event);
     this.#replaceEditToEvent();
   };
 }

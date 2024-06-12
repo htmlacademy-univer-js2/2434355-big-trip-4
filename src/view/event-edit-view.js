@@ -5,7 +5,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 
-const createEventPhotosTemplate = ({ currentDestination }) =>
+const createEventPhotosTemplate = (currentDestination) =>
   `<div class="event__photos-tape">
     ${currentDestination.pictures.map((picture) =>
     `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
@@ -19,7 +19,7 @@ const createOffersTemplate = ({ offers }) => {
         id="event-offer-${offer.title}-${offer.id}"
         type="checkbox"
         name="event-offer-${offer.title}"
-        ${offers.includes(offer.id) ? 'checked' : ''}
+        ${offer.included ? 'checked' : ''}
         >
         <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
           <span class="event__offer-title">${offer.title}</span>
@@ -44,19 +44,22 @@ const createDestinationsTemplate = () =>
   </datalist>`;
 
 
-function createEventEditTemplate(event) {
-  const {id, type, basicPrice, dateFrom, dateTo, destinations, offers} = event;
+function createEventEditTemplate({state, eventDestination, eventOffers}) {
+  const {event} = state;
+  const {type, basicPrice, dateFrom, dateTo} = event;
+  const currentDestination = eventDestination.find((destination) => destination.id === event.destination);
+  const currentOffers = eventOffers.find((offer) => offer.type === type).offers;
 
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
-            <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
+            <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
@@ -66,36 +69,36 @@ function createEventEditTemplate(event) {
           </div>
 
           <div class="event__field-group  event__field-group--destination">
-            <label class="event__label  event__type-output" for="event-destination-${id}">
+            <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
             <input
               class="event__input  event__input--destination"
-              id="event-destination-${id}"
+              id="event-destination-1"
               type="text"
               name="event-destination"
-              value="${destinations}"
-              list="destination-list-${id}"
+              value="${currentDestination.name}"
+              list="destination-list-1"
             >
-            <datalist id="destination-list-${id}">
-              ${createDestinationsTemplate(destinations)}
+            <datalist id="destination-list-1">
+              ${createDestinationsTemplate(currentDestination)}
             </datalist>
           </div>
 
           <div class="event__field-group  event__field-group--time">
-            <label class="visually-hidden" for="event-start-time-${id}">From</label>
+            <label class="visually-hidden" for="event-start-time-1>From</label>
             <input
               class="event__input  event__input--time"
-              id="event-start-time-${id}"
+              id="event-start-time-1"
               type="text"
               name="event-start-time"
               value="${humanizeEventDate(dateFrom, DATE_FORMAT)}"
             >
             &mdash;
-            <label class="visually-hidden" for="event-end-time-${id}">To</label>
+            <label class="visually-hidden" for="event-end-time-1">To</label>
             <input
               class="event__input  event__input--time"
-              id="event-end-time-${id}"
+              id="event-end-time-1"
               type="text"
               name="event-end-time"
               value="${humanizeEventDate(dateTo, DATE_FORMAT)}"
@@ -103,13 +106,13 @@ function createEventEditTemplate(event) {
           </div>
 
           <div class="event__field-group  event__field-group--price">
-            <label class="event__label" for="event-price-${id}">
+            <label class="event__label" for="event-price-1">
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
             <input
               class="event__input  event__input--price"
-              id="event-price-${id}"
+              id="event-price-1"
               type="number" min="0"
               name="event-price"
               value="${basicPrice}"
@@ -123,19 +126,19 @@ function createEventEditTemplate(event) {
           </button>
         </header>
 
-        ${(offers.length !== 0) ? `<section class="event__details">
+        ${(currentOffers.length !== 0) ? `<section class="event__details">
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
               <div class="event__available-offers">
-                ${createOffersTemplate(offers)}
+                ${createOffersTemplate(currentOffers)}
               </div>
             </section>` : ''}
 
-        ${destinations ? `<section class="event__section  event__section--destination">
+        ${currentDestination ? `<section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${destinations.description}</p>
+            <p class="event__destination-description">${currentDestination.description}</p>
             <div class="event__photos-container">
-              ${createEventPhotosTemplate(destinations)}</div>` : ''}
+              ${createEventPhotosTemplate(currentDestination)}</div>` : ''}
           </section>
         </section>
       </form>
@@ -143,15 +146,17 @@ function createEventEditTemplate(event) {
   );
 }
 export default class EventEditView extends AbstractStatefulView{
-  #event = null;
+  #eventDestination = null;
+  #eventOffers = null;
   #handleFormSubmit = null;
   #handleFormReset = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({event = EVENT_EMPTY, onFormSubmit, onFormReset}) {
+  constructor({event = EVENT_EMPTY, onFormSubmit, onFormReset, eventDestination, eventOffers}) {
     super();
-    this._setState(event);
+    this.#eventDestination = eventDestination;
+    this.#eventOffers = eventOffers;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormReset = onFormReset;
     this._setState(EventEditView.parseEventToState({event}));
@@ -160,7 +165,11 @@ export default class EventEditView extends AbstractStatefulView{
   }
 
   get template() {
-    return createEventEditTemplate(this._state);
+    return createEventEditTemplate({
+      state: this._state,
+      eventDestination: this.#eventDestination,
+      eventOffers: this.#eventOffers
+    });
   }
 
   reset = (event) => this.updateElement({event});
@@ -269,8 +278,9 @@ export default class EventEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
-    const selectedDestination = this.#event.destinations.map((destination) => destination.name === evt.target.value);
+    const selectedDestination = this.#eventDestination.find((destination) => destination.name === evt.target.value);
     const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
+
     this.updateElement({
       event: {
         ...this._state.event,

@@ -1,22 +1,17 @@
-import { getRandomArrayElement, getRandomInteger } from '../utils/common.js';
+import { getRandomInteger } from '../utils/common.js';
 import { generateDate, isFavoriteEvent } from '../utils/event.js';
-import { EVENT_TYPES, MIN_BASIC_PRICE, MAX_BASIC_PRICE, DESTINATIONS } from '../const.js';
-import dayjs from 'dayjs';
-import { generateDestination } from './destination.js';
-import { generateOffers } from './offer.js';
+import { MIN_BASIC_PRICE, MAX_BASIC_PRICE } from '../const.js';
 
-function generateEvent () {
-  const type = getRandomArrayElement(EVENT_TYPES);
-
+function generateEvent (type, destinationId, offerIds) {
   return {
     id: crypto.randomUUID(),
-    type: type,
+    type,
     basicPrice: getRandomInteger(MIN_BASIC_PRICE, MAX_BASIC_PRICE),
-    dateFrom: dayjs(generateDate),
-    dateTo: dayjs(generateDate),
-    destinations: generateDestination(getRandomArrayElement(DESTINATIONS)),
-    offers: Array.from({ length: getRandomInteger(0, 5) }, () => generateOffers(type)),
-    isFavorite: isFavoriteEvent()
+    dateFrom: generateDate({next: false}),
+    dateTo: generateDate({next: true}),
+    destination: destinationId,
+    offers: offerIds,
+    isFavorite: isFavoriteEvent
   };
 }
 

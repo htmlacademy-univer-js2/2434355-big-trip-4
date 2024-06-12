@@ -1,28 +1,21 @@
-import { getRandomInteger, getRandomArrayElement } from '../utils/common.js';
-import { TEXT, MIN_VALUE, MAX_COUNT_DESCRIPTION, URL } from '../const.js';
+import { getRandomInteger } from '../utils/common.js';
+import { TEXT, DESTINATIONS } from '../const.js';
 
-function createDescription(text) {
-  const sentencesCount = getRandomInteger(MIN_VALUE, MAX_COUNT_DESCRIPTION);
-  const description = [];
-  for (let i = 0; i < sentencesCount; i++) {
-    description.push(getRandomArrayElement(text.split('.')));
-  }
+const remainingDestinations = [...DESTINATIONS];
 
-  return description.join(' ');
-}
+function generateDestination() {
+  const randomIndex = getRandomInteger(0, remainingDestinations.length - 1);
+  const destination = remainingDestinations[randomIndex];
 
-function getRandomPicture() {
-  return URL + crypto.randomUUID();
-}
+  remainingDestinations.splice(randomIndex, 1);
 
-function generateDestination(currentDestination) {
   return {
     id: crypto.randomUUID(),
-    name: currentDestination,
-    description: createDescription(TEXT),
+    name: destination,
+    description: TEXT,
     pictures: Array.from({ length: getRandomInteger(0, 5) }, () => ({
-      src: getRandomPicture(),
-      description: `${currentDestination} description`
+      src: `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`,
+      description: `${destination} description`
     }))
   };
 }

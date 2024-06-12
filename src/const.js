@@ -1,4 +1,6 @@
-import { getRandomArrayElement, getRandomInteger } from './utils/common.js';
+const OFFER_COUNT = 5;
+const DESTINATION_COUNT = 5;
+const EVENT_COUNT = 5;
 
 const EVENT_TYPES = [
   'Taxi',
@@ -10,6 +12,17 @@ const EVENT_TYPES = [
   'Check-in',
   'Sightseeing',
   'Restaurant',
+];
+
+const OFFERS = [
+  'Order Uber',
+  'Add luggage',
+  'Switch to comfort',
+  'Rent a car',
+  'Add breakfast',
+  'Book tickets',
+  'Lunch in city',
+  'Upgrade to a business class'
 ];
 
 const DESTINATIONS = [
@@ -55,16 +68,19 @@ const DATE_FORMAT_HOURS = 'HH:mm';
 
 const EVENT_EMPTY = {
   id: crypto.randomUUID(),
-  type: getRandomArrayElement(EVENT_TYPES),
-  basicPrice: getRandomInteger(MIN_BASIC_PRICE, MAX_BASIC_PRICE),
-  dateFrom: new Date(),
-  dateTo: new Date(),
+  type: EVENT_TYPES[0],
+  basicPrice: 0,
+  dateFrom: null,
+  dateTo: null,
   destination: null,
-  offers: '',
+  offers: [],
   isFavorite: false
 };
 
-export { EVENT_TYPES,
+export { OFFER_COUNT,
+  DESTINATION_COUNT,
+  EVENT_COUNT,
+  EVENT_TYPES,
   DESTINATIONS,
   TEXT,
   MIN_VALUE,
@@ -80,5 +96,6 @@ export { EVENT_TYPES,
   FilterType,
   SortType,
   EVENT_EMPTY,
-  MODE
+  MODE,
+  OFFERS
 };
