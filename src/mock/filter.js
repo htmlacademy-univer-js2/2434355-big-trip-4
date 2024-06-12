@@ -1,11 +1,12 @@
-import { filter } from "../utils/filter.js";
+import { filter } from '../utils/filter';
 
-const generateFilters = (points) => {
-    return Object.entries(filter)
-    .map(([filterType, filterPoints]) => ({
-        type: filterType,
-        hasPoints: filterPoints(points).length > 0
-    }));
-};
+function generateFilter(points) {
+  return Object.entries(filter).map(
+    ([filterType, filterPoints]) => ({
+      type: filterType,
+      count: filterPoints(points).length,
+    }),
+  );
+}
 
-export { generateFilters };
+export {generateFilter};
