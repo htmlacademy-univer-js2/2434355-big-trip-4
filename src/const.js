@@ -1,50 +1,50 @@
 // const DESTINATIONS = ['Amsterdam', 'Chamonix', 'Geneva', 'Paris', 'Saint Petersburg', 'Vienna'];
 const POINT_TYPES = [
-  "taxi",
-  "flight",
-  "bus",
-  "train",
-  "ship",
-  "drive",
-  "check-in",
-  "sightseeing",
-  "restaurant",
+  'taxi',
+  'flight',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'check-in',
+  'sightseeing',
+  'restaurant',
 ];
 
 const FilterType = {
-  EVERYTHING: "everything",
-  FUTURE: "future",
-  PRESENT: "present",
-  PAST: "past",
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
 };
 
 const SortType = {
-  DAY: "day",
-  TIME: "time",
-  PRICE: "price",
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
 };
 
 const UserAction = {
-  UPDATE_POINT: "UPDATE",
-  ADD_POINT: "ADD",
-  DELETE_POINT: "DELETE",
+  UPDATE_POINT: 'UPDATE',
+  ADD_POINT: 'ADD',
+  DELETE_POINT: 'DELETE',
 };
 
 const UpdateType = {
-  PATCH: "PATCH",
-  MINOR: "MINOR",
-  MAJOR: "MAJOR",
-  INIT: "INIT",
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const EditingType = {
-  UPDATE: "UPDATE",
-  NEW: "NEW",
+  UPDATE: 'UPDATE',
+  NEW: 'NEW',
 };
 
 const Method = {
-  GET: "GET",
-  PUT: "PUT",
+  GET: 'GET',
+  PUT: 'PUT',
 };
 
 export {
