@@ -45,6 +45,13 @@ const EditingType = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
 };
 
 export {
@@ -55,4 +62,5 @@ export {
   UpdateType,
   EditingType,
   Method,
+  TimeLimit
 };

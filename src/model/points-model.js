@@ -35,25 +35,25 @@ export default class PointsModel extends Observable {
     }
   }
 
-  addPoint(updateType, update) {
-    this.#points = [
-      ...this.#points,
-      update
-    ];
-
-    this._notify(updateType, update);
+  async add(updateType, point) {
+    try {
+      const addedPoint = await this.#pointsApiService.addPoint(this.#adaptToServer(point));
+      const adaptedPoint = this.#adaptToClient(addedPoint);
+      this.#points.push(adaptedPoint);
+      this._notify(updateType, adaptedPoint);
+    } catch {
+      throw new Error('Can\'t add point');
+    }
   }
 
-  deletePoint(updateType, update) {
-    const index = this.#points.findIndex((point) => point.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting point');
+  async delete(updateType, point) {
+    try {
+      await this.#pointsApiService.deletePoint(point);
+      this.#points = this.#points.filter((pointItem) => pointItem.id !== point.id);
+      this._notify(updateType);
+    } catch {
+      throw new Error('Can\'t delete point');
     }
-
-    this.#points = this.#points.filter((point) => point.id !== update.id);
-
-    this._notify(updateType);
   }
 
   async init() {
@@ -81,6 +81,22 @@ export default class PointsModel extends Observable {
     delete adaptedPoint['date_to'];
     delete adaptedPoint['is_favorite'];
 
+    return adaptedPoint;
+  }
+
+  #adaptToServer(point) {
+    const adaptedPoint = {
+      ...point,
+      ['base_price']: Number(point.basePrice),
+      ['date_from']: new Date(point.dateFrom).toISOString(),
+      ['date_to']: new Date(point.dateTo).toISOString(),
+      ['is_favorite']: point.isFavorite
+    };
+
+    delete adaptedPoint.basePrice;
+    delete adaptedPoint.dateFrom;
+    delete adaptedPoint.dateTo;
+    delete adaptedPoint.isFavorite;
     return adaptedPoint;
   }
 }
