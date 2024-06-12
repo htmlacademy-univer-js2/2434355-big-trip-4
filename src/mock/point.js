@@ -11,7 +11,7 @@ const points = [{
     'b4c3e4e6-9053-42ce-b747-e281314baa33'],
   type: POINT_TYPES[1]
 }, {
-  basePrice: 1100,
+  basePrice: 1250,
   dateFrom: '2020-08-10T10:25:56.845Z',
   dateTo: '2020-08-10T15:55:56.845Z',
   destination: 1,
@@ -19,7 +19,7 @@ const points = [{
   offers: [],
   type: POINT_TYPES[0]
 }, {
-  basePrice: 1200,
+  basePrice: 1300,
   dateFrom: '2021-08-05T10:25:56.845Z',
   dateTo: '2021-08-08T15:55:56.845Z',
   destination: 2,
@@ -27,7 +27,7 @@ const points = [{
   offers: [],
   type: POINT_TYPES[2]
 }, {
-  basePrice: 1300,
+  basePrice: 1500,
   dateFrom: '2020-08-05T10:25:56.845Z',
   dateTo: '2021-08-08T15:55:56.845Z',
   destination: 3,
