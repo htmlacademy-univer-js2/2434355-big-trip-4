@@ -1,6 +1,9 @@
-import AbstractStatefulView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeEventDate } from '../utils/event.js';
-import { DATE_FORMAT, EVENT_TYPES, DESTINATIONS } from '../const.js';
+import { DATE_FORMAT, EVENT_TYPES, DESTINATIONS, EVENT_EMPTY } from '../const.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
 const createEventPhotosTemplate = ({ currentDestination }) =>
   `<div class="event__photos-tape">
@@ -8,18 +11,17 @@ const createEventPhotosTemplate = ({ currentDestination }) =>
     `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
   </div>`;
 
-const createOffersTemplate = (currentOffers, selectedOffers) => {
-  currentOffers.map((offer) => {
-    const offerType = offer.title;
+const createOffersTemplate = ({ offers }) => {
+  offers.map((offer) => {
     `<div class="event__offer-selector">
     <input
         class="event__offer-checkbox  visually-hidden"
-        id="event-offer-${offerType}-${offer.id}"
+        id="event-offer-${offer.title}-${offer.id}"
         type="checkbox"
-        name="event-offer-${offerType}"
-        ${selectedOffers.includes(offer.id) ? 'checked' : ''}
+        name="event-offer-${offer.title}"
+        ${offers.includes(offer.id) ? 'checked' : ''}
         >
-        <label class="event__offer-label" for="event-offer-${offerType}-${offer.id}">
+        <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
           <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.offerPrice}</span>
@@ -42,11 +44,8 @@ const createDestinationsTemplate = () =>
   </datalist>`;
 
 
-function createEventEditTemplate({state, destinations, offers}) {
-  const {event} = state;
-  const {id, type, basicPrice, dateFrom, dateTo} = event;
-  const currentOffers = offers.find((offer) => offer.type === type);
-  const currentDestination = destinations.find((destination) => destination.id === event.destination);
+function createEventEditTemplate(event) {
+  const {id, type, basicPrice, dateFrom, dateTo, destinations, offers} = event;
 
   return (
     `<li class="trip-events__item">
@@ -75,7 +74,7 @@ function createEventEditTemplate({state, destinations, offers}) {
               id="event-destination-${id}"
               type="text"
               name="event-destination"
-              value="${currentDestination ? currentDestination.name : ''}"
+              value="${destinations}"
               list="destination-list-${id}"
             >
             <datalist id="destination-list-${id}">
@@ -124,19 +123,19 @@ function createEventEditTemplate({state, destinations, offers}) {
           </button>
         </header>
 
-        ${(currentOffers.length !== 0) ? `<section class="event__details">
+        ${(offers.length !== 0) ? `<section class="event__details">
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
               <div class="event__available-offers">
-                ${createOffersTemplate({currentOffers})}
+                ${createOffersTemplate(offers)}
               </div>
             </section>` : ''}
 
-        ${currentDestination ? `<section class="event__section  event__section--destination">
+        ${destinations ? `<section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${currentDestination.description}</p>
+            <p class="event__destination-description">${destinations.description}</p>
             <div class="event__photos-container">
-              ${createEventPhotosTemplate(currentDestination)}</div>` : ''}
+              ${createEventPhotosTemplate(destinations)}</div>` : ''}
           </section>
         </section>
       </form>
@@ -144,45 +143,41 @@ function createEventEditTemplate({state, destinations, offers}) {
   );
 }
 export default class EventEditView extends AbstractStatefulView{
-  #destinations = null;
-  #offers = null;
+  #event = null;
   #handleFormSubmit = null;
   #handleFormReset = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({event = EVENT_EMPTY, destinations, offers, onFormSubmit, onFormReset}) {
+  constructor({event = EVENT_EMPTY, onFormSubmit, onFormReset}) {
     super();
-    this.#destinations = destinations;
-    this.#offers = offers;
+    this._setState(event);
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormReset = onFormReset;
-
     this._setState(EventEditView.parseEventToState({event}));
+
     this._restoreHandlers();
   }
 
   get template() {
-    return createEventEditTemplate({
-      state: this._state,
-      destinations: this.#destinations,
-      offers: this.#offers
-    });
+    return createEventEditTemplate(this._state);
   }
 
   reset = (event) => this.updateElement({event});
 
-  removeElement() {
+  removeElement = () => {
     super.removeElement();
+
     if (this.#datepickerFrom) {
       this.#datepickerFrom.destroy();
       this.#datepickerFrom = null;
     }
+
     if (this.#datepickerTo) {
       this.#datepickerTo.destroy();
       this.#datepickerTo = null;
     }
-  }
+  };
 
   _restoreHandlers = () => {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
@@ -198,20 +193,60 @@ export default class EventEditView extends AbstractStatefulView{
     this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
 
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
-    this.#setDatepickers();
+
+    this.#setFlatpickr();
   };
 
-  #setDatepickers() {
-    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
-    const baseConfig = {
-      dateFormat: 'd/m/y H:i',
+  #setFlatpickr() {
+    const commonConfig = {
       enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      'time_24hr': true,
       locale: {
         firstDayOfWeek: 1,
-      },
-      'time_24hr': true,
+      }
     };
+
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelectorAll('.event__input--time')[0],
+      {
+        ...commonConfig,
+        defaultDate: dayjs(this._state.dateFrom).format('DD/MM/YY HH:mm'),
+        onClose: this.#editStartDateChangeHandler,
+      }
+    );
+
+    this.#datepickerTo = flatpickr(
+      this.element.querySelectorAll('.event__input--time')[1],
+      {
+        ...commonConfig,
+        defaultDate: dayjs(this._state.dateTo).format('DD/MM/YY HH:mm'),
+        onClose: this.#editEndDateChangeHandler,
+      }
+    );
   }
+
+  #editStartDateChangeHandler = ([userDate]) => {
+    this._setState({
+      point: {
+        ...this._state.point,
+        dateFrom: userDate
+      }
+    });
+
+    this.#datepickerTo.set('minDate', this._state.point.dateFrom);
+  };
+
+  #editEndDateChangeHandler = ([userDate]) => {
+    this._setState({
+      point: {
+        ...this._state.point,
+        dateTo: userDate
+      }
+    });
+
+    this.#datepickerFrom.set('maxDate', this._state.point.dateTo);
+  };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
@@ -234,11 +269,12 @@ export default class EventEditView extends AbstractStatefulView{
   };
 
   #destinationChangeHandler = (evt) => {
-    const selectedDestination = this.#destinations.find((destination) => destination.name === evt.target.value).id;
+    const selectedDestination = this.#event.destinations.map((destination) => destination.name === evt.target.value);
+    const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
     this.updateElement({
       event: {
         ...this._state.event,
-        destination: selectedDestination
+        destination: selectedDestinationId
       }
     });
   };

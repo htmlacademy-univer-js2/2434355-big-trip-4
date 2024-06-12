@@ -2,14 +2,14 @@ import { generateEvent } from '../mock/event.js';
 import { getRandomInteger } from '../utils/common.js';
 
 export default class MockService {
-  events = [];
+  #events = null;
 
   constructor() {
-    this.events = this.generateEvents();
+    this.#events = this.generateEvents();
   }
 
   getEvents() {
-    return this.events;
+    return this.#events;
   }
 
   generateEvents() {

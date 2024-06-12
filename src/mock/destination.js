@@ -15,14 +15,14 @@ function getRandomPicture() {
   return URL + crypto.randomUUID();
 }
 
-function generateDestination (destination) {
+function generateDestination(currentDestination) {
   return {
     id: crypto.randomUUID(),
-    name: destination,
+    name: currentDestination,
     description: createDescription(TEXT),
     pictures: Array.from({ length: getRandomInteger(0, 5) }, () => ({
       src: getRandomPicture(),
-      description: `${destination} description`
+      description: `${currentDestination} description`
     }))
   };
 }

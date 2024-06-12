@@ -14,8 +14,8 @@ function generateEvent () {
     basicPrice: getRandomInteger(MIN_BASIC_PRICE, MAX_BASIC_PRICE),
     dateFrom: dayjs(generateDate),
     dateTo: dayjs(generateDate),
-    destination: generateDestination(getRandomArrayElement(DESTINATIONS)),
-    offers: generateOffers(type),
+    destinations: generateDestination(getRandomArrayElement(DESTINATIONS)),
+    offers: Array.from({ length: getRandomInteger(0, 5) }, () => generateOffers(type)),
     isFavorite: isFavoriteEvent()
   };
 }

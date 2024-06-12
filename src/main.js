@@ -1,6 +1,6 @@
 import MockService from './service/mock-service.js';
 import TripPresenter from './presenter/trip-presenter.js';
-import EventModel from './model/events-model.js';
+import EventsModel from './model/events-model.js';
 
 const siteMainElement = document.querySelector('.page-main');
 
@@ -13,7 +13,7 @@ const tripContainer = {
 
 const mockService = new MockService();
 
-const eventsModel = new EventModel(mockService);
+const eventsModel = new EventsModel(mockService);
 
 const tripPresenter = new TripPresenter({ tripContainer, eventsModel });
 tripPresenter.init();
