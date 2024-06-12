@@ -1,5 +1,5 @@
 import { getRandomInteger, getRandomArrayElement } from '../utils/common.js';
-import { DESTINATIONS, TEXT, MIN_VALUE, MAX_COUNT_DESCRIPTION, MAX_PICTURE_ID, URL } from '../const.js';
+import { TEXT, MIN_VALUE, MAX_COUNT_DESCRIPTION, URL } from '../const.js';
 
 function createDescription(text) {
   const sentencesCount = getRandomInteger(MIN_VALUE, MAX_COUNT_DESCRIPTION);
@@ -12,43 +12,19 @@ function createDescription(text) {
 }
 
 function getRandomPicture() {
-  return URL + getRandomInteger(MIN_VALUE, MAX_PICTURE_ID);
+  return URL + crypto.randomUUID();
 }
 
-const mockDestinations = [
-  {
-    id: 1,
+function generateDestination (destination) {
+  return {
+    id: crypto.randomUUID(),
+    name: destination,
     description: createDescription(TEXT),
-    name: getRandomArrayElement(DESTINATIONS),
-    pictures: [
-      {
-        src: getRandomPicture(),
-        description: ''
-      }
-    ]
-  },
-  {
-    id: 2,
-    description: createDescription(TEXT),
-    name: getRandomArrayElement(DESTINATIONS),
-    pictures: [
-      {
-        src: getRandomPicture(),
-        description: ''
-      }
-    ]
-  },
-  {
-    id: 3,
-    description: createDescription(TEXT),
-    name: getRandomArrayElement(DESTINATIONS),
-    pictures: [
-      {
-        src: getRandomPicture(),
-        description: ''
-      }
-    ]
-  },
-];
+    pictures: Array.from({ length: getRandomInteger(0, 5) }, () => ({
+      src: getRandomPicture(),
+      description: `${destination} description`
+    }))
+  };
+}
 
-export { mockDestinations };
+export { generateDestination };

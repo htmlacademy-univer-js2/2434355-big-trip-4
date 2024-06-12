@@ -53,6 +53,10 @@ function getWeightForNullDate(dateA, dateB) {
   return null;
 }
 
+function generateDate () {
+  return `2024-0${getRandomInteger(1, 6)}-${getRandomInteger(1, 30)} ${getRandomInteger(0, 2)}${getRandomInteger(0, 9)}:${getRandomInteger(0, 5)}${getRandomInteger(0, 9)}`;
+}
+
 function sortByDay(eventA, eventB) {
   const weight = getWeightForNullDate(eventA.dateFrom, eventB.dateFrom);
 
@@ -69,4 +73,13 @@ function sortByTime(eventA, eventB) {
   return weight ?? dayjs(eventA.dateTo - eventA.dateFrom).diff(dayjs(eventB.dateTo - eventB.dateFrom));
 }
 
-export { humanizeEventDate, getDateDifference, isFavoriteEvent, isEventFuture, isEventPast, isEventPresent, sortByDay, sortByPrice, sortByTime };
+export { humanizeEventDate,
+  getDateDifference,
+  isFavoriteEvent,
+  isEventFuture,
+  isEventPast,
+  isEventPresent,
+  sortByDay,
+  sortByPrice,
+  sortByTime,
+  generateDate};

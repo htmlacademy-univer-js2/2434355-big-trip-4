@@ -4,7 +4,7 @@ import EventEditView from '../view/event-edit-view.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
+  EDITING: 'EDITING'
 };
 
 export default class EventPresenter {

@@ -1,19 +1,19 @@
-import {render, RenderPosition} from './framework/render.js';
-import TripView from './view/trip-view.js';
-import FilterView from './view/filter-view.js';
-import EventPresenter from './presenter/trip-presenter.js';
+import MockService from './service/mock-service.js';
+import TripPresenter from './presenter/trip-presenter.js';
 import EventModel from './model/events-model.js';
-import {generateFilter} from './mock/filter.js';
 
-const tripElement = document.querySelector('.trip-main');
-const filtersElement = tripElement.querySelector('.trip-controls__filters');
-const eventsElement = document.querySelector('.trip-events');
+const siteMainElement = document.querySelector('.page-main');
 
-const eventsModel = new EventModel();
-const eventsPresenter = new EventPresenter({eventsContainer: eventsElement, eventsModel});
-const filters = generateFilter(eventsModel.events);
+const tripContainer = {
+  mainElement: siteMainElement,
+  tripMain: document.querySelector('.trip-main'),
+  eventListElement: siteMainElement.querySelector('.trip-events'),
+  filtersElement: document.querySelector('.trip-controls__filters')
+};
 
-render(new TripView({eventsModel}), tripElement, RenderPosition.AFTERBEGIN);
-render(new FilterView({filters}), filtersElement);
+const mockService = new MockService();
 
-eventsPresenter.init();
+const eventsModel = new EventModel(mockService);
+
+const tripPresenter = new TripPresenter({ tripContainer, eventsModel });
+tripPresenter.init();

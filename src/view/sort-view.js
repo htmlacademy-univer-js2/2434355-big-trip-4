@@ -33,9 +33,14 @@ function createSortViewTemplate(isChecked) {
 
 export default class SortView extends AbstractView{
   #handleSortTypeChange = null;
+  #items = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({onSortTypeChange, sortType}) {
     super();
+    this.#items = Object.values(SortType).map((type) => ({
+      type,
+      isChecked: (type === sortType),
+    }));
     this.#handleSortTypeChange = onSortTypeChange;
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
