@@ -2,7 +2,7 @@ import { getRandomArrayElement } from '../utils/common.js';
 import { POINT_TYPES } from '../const.js';
 
 const points = [{
-  basePrice: 1000,
+  basePrice: 1010,
   dateFrom: '2019-07-10T12:55:56.845Z',
   dateTo: '2019-07-10T13:35:56.845Z',
   destination: 0,
