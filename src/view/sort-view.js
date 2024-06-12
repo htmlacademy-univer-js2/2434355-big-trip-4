@@ -1,57 +1,64 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortType } from '../const.js';
+import { EnabledSortType, SortType } from '../const.js';
 
-function createSortTemplate({currSortType}) {
-  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-  <div class="trip-sort__item  trip-sort__item--day">
-    <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" ${SortType.DAY === currSortType ? 'checked' : ''}>
-    <label class="trip-sort__btn" for="sort-day" data-sort-type="${SortType.DAY}">Day</label>
-  </div>
+const createSortItemsTemplate = ({items}) => {
+    const sortItems = items.map(sortItem => {
+        return (
+            `<div class="trip-sort__item  trip-sort__item--${sortItem.type}">
+            <input
+              id="sort-${sortItem.type}"
+              class="trip-sort__input  visually-hidden"
+              type="radio"
+              name="trip-sort"
+              value="sort-${sortItem.type}"
+              data-sort-type="${sortItem.type}"
+              ${(sortItem.isChecked) ? 'checked' : ''}
+              ${(sortItem.isDisabled) ? 'disabled' : ''}
+            >
+            <label
+              class="trip-sort__btn"
+              for="sort-${sortItem.type}">${sortItem.type}</label>
+          </div>`
+        )
+    }).join('');
 
-  <div class="trip-sort__item  trip-sort__item--event">
-    <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" disabled>
-    <label class="trip-sort__btn" for="sort-event">Event</label>
-  </div>
+    return sortItems;
+}
 
-  <div class="trip-sort__item  trip-sort__item--time">
-    <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" ${SortType.TIME === currSortType ? 'checked' : ''}>
-    <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.TIME}">Time</label>
-  </div>
-
-  <div class="trip-sort__item  trip-sort__item--price">
-    <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" ${SortType.PRICE === currSortType ? 'checked' : ''}>
-    <label class="trip-sort__btn" for="sort-price" data-sort-type="${SortType.PRICE}">Price</label>
-  </div>
-
-  <div class="trip-sort__item  trip-sort__item--offer">
-    <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
-    <label class="trip-sort__btn" for="sort-offer">Offers</label>
-  </div>
-</form>`;
+const createSortTemplate = ({items}) => {
+    return (
+        `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+            ${createSortItemsTemplate({items})}
+        </form>`
+    );
 }
 
 export default class SortView extends AbstractView {
-  #handleSortTypeChange = null;
-  #currentSortType = null;
+    #items = null;
+    #onItemChange = null;
 
-  constructor({ onSortTypeChange, currentSortType }) {
-    super();
-    this.#handleSortTypeChange = onSortTypeChange;
-    this.#currentSortType = currentSortType;
+    constructor({sortType, onItemChange}) {
+        super();
 
-    this.element.addEventListener('click', this.#sortTypeChangeHandler);
-  }
+        this.#items = Object.values(SortType).map((type) => ({
+            type,
+            isChecked: type === sortType,
+            isDisabled: !EnabledSortType[type]
+        }));
 
-  #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'LABEL' || evt.target.outerText === 'EVENT' || evt.target.outerText === 'OFFERS') {
-      return;
+        this.#onItemChange = onItemChange;
+        
+        this.element.addEventListener('change', this.#itemChangeHandler);
     }
 
-    evt.preventDefault();
-    this.#handleSortTypeChange(evt.target.dataset.sortType);
-  };
+    get template() {
+        return createSortTemplate({
+            items: this.#items
+        });
+    }
 
-  get template() {
-    return createSortTemplate({ currSortType: this.#currentSortType});
-  }
+    #itemChangeHandler = (evt) => {
+        evt.preventDefault();
+        this.#onItemChange(evt.target.dataset.sortType);
+    };
 }

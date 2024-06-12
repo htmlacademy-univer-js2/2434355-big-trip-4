@@ -1,24 +1,23 @@
-import PointView from '../view/point-view.js';
-import EditPointView from '../view/edit-point-view.js';
+import EventView from '../view/event-view.js';
+import EditEventView from '../view/edit-event-view.js';
 import { remove, render, replace } from '../framework/render.js';
-import { Mode } from '../const.js';
+import { MODE } from '../const.js';
 
 export default class PointPresenter {
-    #container = null;
+  #tripcontainer = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
-    #destinationsModel = null;
-    #offersModel = null;
+  #handleDataChange = null;
+  #handleModeChange = null;
 
-    #handleDataChange = null;
-    #handleModeChange = null;
+  #pointComponent = null;
+  #editPointComponent = null;
+  #point = null;
+  #mode = MODE.DEFAULT;
 
-    #pointComponent = null;
-    #editPointComponent = null;
-    #point = null;
-    #mode = Mode.DEFAULT;
-
-    constructor({container, destinationsModel, offersModel, onDataChange, onModeChange}) {
-        this.#container = container;
+  constructor({container, destinationsModel, offersModel, onDataChange, onModeChange}) {
+    this.#tripcontainer = container;
         this.#destinationsModel = destinationsModel;
         this.#offersModel = offersModel;
         this.#handleDataChange = onDataChange;
@@ -31,15 +30,15 @@ export default class PointPresenter {
         const prevPointComponent = this.#pointComponent;
         const prevEditPointComponent = this.#editPointComponent;
 
-        this.#pointComponent = new PointView({
+        this.#pointComponent = new EventView({
             point: this.#point,
             pointDestination: this.#destinationsModel.getById(point.destination),
             pointOffers: this.#offersModel.getByType(point.type),
             onEditClick: this.#pointEditClickHandler,
             onFavoriteClick: this.#favoriteClickHandler
         });
-        
-        this.#editPointComponent = new EditPointView({
+
+        this.#editPointComponent = new EditEventView({
             point: this.#point,
             pointDestination: this.#destinationsModel.get(),
             pointOffers: this.#offersModel.get(),
@@ -48,7 +47,7 @@ export default class PointPresenter {
         })
 
         if (!prevPointComponent || !prevEditPointComponent) {
-            render(this.#pointComponent, this.#container);
+            render(this.#pointComponent, this.#tripcontainer);
             return;
         }
 
