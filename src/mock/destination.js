@@ -1,30 +1,23 @@
-import { getRandomInteger, getRandomArrayElement } from '../utils/common.js';
-import { TEXT, MIN_VALUE, MAX_COUNT_DESCRIPTION, URL } from '../const.js';
+import { getRandomInteger } from "../utils.js";
+import { CITIES, DESCRIPTION } from "../const.js";
 
-function createDescription(text) {
-  const sentencesCount = getRandomInteger(MIN_VALUE, MAX_COUNT_DESCRIPTION);
-  const description = [];
-  for (let i = 0; i < sentencesCount; i++) {
-    description.push(getRandomArrayElement(text.split('.')));
-  }
+const remainingCities = [...CITIES];
 
-  return description.join(' ');
-}
+const generateDestination = () => {
+    const randomIndex = getRandomInteger(0, remainingCities.length - 1);
+    const city = remainingCities[randomIndex];
 
-function getRandomPicture() {
-  return URL + crypto.randomUUID();
-}
+    remainingCities.splice(randomIndex, 1);
 
-function generateDestination (destination) {
-  return {
-    id: crypto.randomUUID(),
-    name: destination,
-    description: createDescription(TEXT),
-    pictures: Array.from({ length: getRandomInteger(0, 5) }, () => ({
-      src: getRandomPicture(),
-      description: `${destination} description`
-    }))
-  };
+    return {
+        id: crypto.randomUUID(),
+        description: DESCRIPTION,
+        name: city,
+        pictures: Array.from({ length: getRandomInteger(0, 5) }, () => ({
+            'src': `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`,
+            'description': `${city} description`
+        }))
+    };
 }
 
 export { generateDestination };
